@@ -1,0 +1,38 @@
+{
+  "name": "phoneparser",
+  "version": "1.0.0",
+  "description": "A parser for phone numbers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/**/*.js | tap-spec",
+    "test_debug": "node --debug-brk node_modules/tape/bin/tape test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyburke/phoneparser.git"
+  },
+  "keywords": [
+    "phone",
+    "phone numbers",
+    "numbers",
+    "parser",
+    "area code",
+    "code",
+    "mobile",
+    "landline"
+  ],
+  "author": "Andy Burke <aburke@bitflood.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andyburke/phoneparser/issues"
+  },
+  "homepage": "https://github.com/andyburke/phoneparser#readme",
+  "devDependencies": {
+    "tap-spec": "^4.1.1",
+    "tape": "^4.5.1"
+  },
+  "dependencies": {
+    "countrydata": "^1.0.0",
+    "extend": "^3.0.0"
+  }
+}
