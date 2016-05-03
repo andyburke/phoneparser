@@ -7,7 +7,7 @@ A parser for phone numbers.
 ```javascript
 const phoneparser = require( 'phoneparser' );
 
-const phone = phoneparser.parse( '1 (800) 888-8888' );
+const phone = phoneparser.parse( '93712345678' );
 console.log( JSON.stringify( phone, null, 4 ) );
 ```
 

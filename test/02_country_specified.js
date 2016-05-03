@@ -39,9 +39,12 @@ test( 'COUNTRY SPECIFIED: parse incomplete number', t => {
     t.end();
 } );
 
-test( 'COUNTRY SPECIFIED: fail to parse a bad number', t => {
-    const parsed = phoneparser.parse( '213-308-555', 'USA' );
-    t.notOk( parsed.valid, 'number is NOT valid' );
+test( 'COUNTRY SPECIFIED: parse number from other country', t => {
+    const parsed = phoneparser.parse( '93712345678', 'USA' );
+    t.ok( parsed.valid, 'number is valid' );
+    t.equal( parsed.normalized, '+93712345678', 'number normalized correctly' );
+    t.ok( parsed.country, 'detected country' );
+    t.equal( parsed.country.iso3166.alpha3, 'AFG', 'correct country detected' );
     t.end();
 } );
 

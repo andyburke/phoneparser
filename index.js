@@ -30,7 +30,7 @@ const phoneparser = module.exports = {
 
     parse: ( input, countryCode ) => {
         const stripped = phoneparser.strip( input );
-        const country = countryCode ? countrydata.get( countryCode ) : countrydata.get( {
+        const country = countrydata.get( {
             test: ( _country ) => {
                 const phoneInfo = _country.phone;
                 if ( stripped.indexOf( phoneInfo.code ) === 0 ) {
@@ -42,7 +42,7 @@ const phoneparser = module.exports = {
 
                 return false;
             }
-        } );
+        } ) || ( countryCode ? countrydata.get( countryCode ) : null );
 
         if ( countryCode && !country ) {
             throw new Error( `no country found for country code: ${countryCode}` );
