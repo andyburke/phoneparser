@@ -3,7 +3,7 @@
 const countrydata = require( 'countrydata' );
 const extend = require( 'extend' );
 
-const allowLeadingZeroes = [
+const ALLOW_LEADING_ZEROES = [
     'GAB',
     'CIV',
     'COG'
@@ -12,8 +12,8 @@ const allowLeadingZeroes = [
 const phoneparser = module.exports = {
     strip: ( input ) => {
         const trimmed = input.trim();
-        const nonNumbersRemoved = trimmed.replace( /\D/g, '' );
-        return nonNumbersRemoved;
+        const non_numbers_removed = trimmed.replace( /\D/g, '' );
+        return non_numbers_removed;
     },
 
     format: ( input, formatting ) => {
@@ -28,34 +28,42 @@ const phoneparser = module.exports = {
         return formatted.join( '' );
     },
 
-    parse: ( input, countryCode ) => {
+    parse: ( input, country_code ) => {
         const stripped = phoneparser.strip( input );
-        const country = countrydata.get( {
-            test: ( _country ) => {
-                const phoneInfo = _country.phone;
-                if ( stripped.indexOf( phoneInfo.code ) === 0 ) {
-                    const validLengths = phoneInfo.lengths.map( length => length + phoneInfo.code.length );
-                    if ( validLengths.indexOf( stripped.length ) !== -1 ) {
-                        return true;
-                    }
+        const possible_countries = countrydata.all.filter( _country => {
+            const phone_info = _country.phone;
+            if ( stripped.indexOf( phone_info.code ) === 0 ) {
+                const valid_lengths = phone_info.lengths.map( length => length + phone_info.code.length );
+                if ( valid_lengths.indexOf( stripped.length ) !== -1 ) {
+                    return true;
                 }
+            }
 
+            const is_valid_length_for_country = phone_info.lengths.some( length => length === stripped.length );
+
+            if ( !is_valid_length_for_country ) {
                 return false;
             }
-        } ) || ( countryCode ? countrydata.get( countryCode ) : null );
 
-        if ( countryCode && !country ) {
-            throw new Error( `no country found for country code: ${countryCode}` );
-        }
+            const valid_prefix = Object.keys( phone_info.prefixes ).some( prefix => {
+                return stripped.indexOf( prefix ) === 0;
+            } );
+
+            return valid_prefix;
+        } );
+
+        const country = possible_countries.find( _country => {
+            return _country.iso3166.alpha3 === country_code;
+        } ) || ( possible_countries.length && possible_countries[ 0 ] ) || null;
 
         let normalized = stripped;
 
-        if ( allowLeadingZeroes.indexOf( countryCode ) === -1 ) {
+        if ( ALLOW_LEADING_ZEROES.indexOf( country_code ) === -1 ) {
             normalized = normalized.replace( /^0+/, '' );
         }
 
         // if input 89234567890, RUS, remove the 8
-        if ( countryCode === 'RUS' && normalized.length === 11 && normalized.indexOf( '89' ) === 0 ) {
+        if ( country_code === 'RUS' && normalized.length === 11 && normalized.indexOf( '89' ) === 0 ) {
             normalized = normalized.slice( 1 );
         }
 
@@ -89,7 +97,7 @@ const phoneparser = module.exports = {
 
         return {
             valid: valid,
-            normalized: valid ? `+${normalized}` : normalized,
+            normalized: valid ? `+${ normalized }` : normalized,
             stripped: stripped,
             format: phoneparser.format.bind( null, stripped ),
             localized: {
