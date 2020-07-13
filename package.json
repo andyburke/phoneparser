@@ -1,6 +1,6 @@
 {
   "name": "phoneparser",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A parser for phone numbers.",
   "main": "index.js",
   "scripts": {
@@ -28,11 +28,11 @@
   },
   "homepage": "https://github.com/andyburke/phoneparser#readme",
   "devDependencies": {
-    "tap-spec": "^4.1.1",
-    "tape": "^4.5.1"
+    "tap-spec": "^5.0.0",
+    "tape": "^5.0.1"
   },
   "dependencies": {
     "countrydata": "^2.0.1",
-    "extend": "^3.0.0"
+    "extend": "^3.0.2"
   }
 }
