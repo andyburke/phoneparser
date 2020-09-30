@@ -52,7 +52,7 @@ const phoneparser = module.exports = {
 			return valid_prefix;
 		} );
 
-		const country = possible_countries.find( ( country ) => ( country?.iso3166?.alpha3 === country_code ) ) || possible_countries[ 0 ] || null;
+		const country = possible_countries.find( ( country ) => ( country && country.iso3166 && country.iso3166.alpha3 === country_code ) ) || possible_countries[ 0 ] || null;
 
 		let normalized = stripped;
 
