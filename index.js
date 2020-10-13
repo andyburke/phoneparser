@@ -52,7 +52,21 @@ const phoneparser = module.exports = {
 			return valid_prefix;
 		} );
 
-		const country = possible_countries.find( ( country ) => ( country && country.iso3166 && country.iso3166.alpha3 === country_code ) ) || possible_countries[ 0 ] || null;
+		// try to sort possible matching countries by:
+		//   1) if a longer valid prefix is matched, sort earlier
+		//   2) if a country has fewer possible phone number lengths, and this one matches, sort that country earlier
+		const sorted_possible_countries = possible_countries.sort( ( lhs, rhs ) => {
+			const lhs_matched_prefix = Object.keys( lhs.phone.prefixes ).find( ( prefix ) => ( stripped.indexOf( prefix === 0 ) ) );
+			const rhs_matched_prefix = Object.keys( rhs.phone.prefixes ).find( ( prefix ) => ( stripped.indexOf( prefix === 0 ) ) );
+
+			if ( lhs_matched_prefix && rhs_matched_prefix ) {
+				return lhs_matched_prefix.length > rhs_matched_prefix.length ? -1 : lhs_matched_prefix.length < rhs_matched_prefix.length ? 1 : 0;
+			}
+
+			return lhs.phone.lengths.length < rhs.phone.lengths.length ? -1 : lhs.phone.lengths.length > rhs.phone.lengths.length ? 1 : 0;
+		} );
+
+		const country = sorted_possible_countries.find( ( country ) => ( country && country.iso3166 && country.iso3166.alpha3 === country_code ) ) || sorted_possible_countries[ 0 ] || null;
 
 		let normalized = stripped;
 

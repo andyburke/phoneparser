@@ -1,6 +1,6 @@
 {
   "name": "phoneparser",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A parser for phone numbers.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/andyburke/phoneparser#readme",
   "devDependencies": {
-    "eslint": "^7.10.0",
+    "eslint": "^7.11.0",
     "tap-spec": "^5.0.0",
     "tape": "^5.0.1"
   },

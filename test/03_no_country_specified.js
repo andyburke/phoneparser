@@ -12,6 +12,22 @@ test( 'NO COUNTRY SPECIFIED: parse number', ( t ) => {
 	t.end();
 } );
 
+test( 'NO COUNTRY SPECIFIED: parse number without leading 1', ( t ) => {
+	const parsed = phoneparser.parse( '213-308-5555' );
+	t.ok( parsed.valid, 'number is valid' );
+	t.ok( parsed.country, 'detected country' );
+	t.equal( parsed.country.iso3166.alpha3, 'USA', 'correct country detected' );
+	t.end();
+} );
+
+test( 'NO COUNTRY SPECIFIED: parse number without leading 1, non-mobile area code', ( t ) => {
+	const parsed = phoneparser.parse( '518-459-5555' );
+	t.ok( parsed.valid, 'number is valid' );
+	t.ok( parsed.country, 'detected country' );
+	t.equal( parsed.country.iso3166.alpha3, 'USA', 'correct country detected' );
+	t.end();
+} );
+
 test( 'NO COUNTRY SPECIFIED: detect country with 2 digit code', ( t ) => {
 	const parsed = phoneparser.parse( '93712345678' );
 	t.ok( parsed.valid, 'number is valid' );
